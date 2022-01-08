@@ -129,4 +129,13 @@ services:
 #      - "9090:8080" # The Web UI (enabled by --api)
 #    volumes:
 #      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+   portainer-ce:
+     container_name: portainer
+     restart: on-failure
+     ports:
+       - '9000:9000'
+     volumes:
+       - '/var/run/docker.sock:/var/run/docker.sock'
+       - 'portainer_data:/data'
+     image: portainer/portainer-ce
 
