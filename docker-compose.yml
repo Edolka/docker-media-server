@@ -13,11 +13,11 @@ services:
       - "${MOVIESDIR}:/media/movies"
       - /etc/localtime:/etc/localtime:ro
     user: "1000:1000"
-    labels:
-      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)"
   sonarr:
     container_name: sonarr
-    image: linuxserver/sonarr:preview
+    image: linuxserver/sonarr
     restart: unless-stopped
     ports:
       - 8989:8989
@@ -33,8 +33,8 @@ services:
     depends_on:
       - jackett
       - deluge
-    labels:
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
   radarr:
     container_name: radarr
     image: linuxserver/radarr
@@ -53,8 +53,8 @@ services:
     depends_on:
       - jackett
       - deluge
-    labels:
-      - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)"
   ombi:
     image: linuxserver/ombi
     container_name: ombi
@@ -67,8 +67,8 @@ services:
     volumes:
       - ./ombi:/config
       - /etc/localtime:/etc/localtime:ro
-    labels:
-      - "traefik.http.routers.ombi.rule=Host(`ombi.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.ombi.rule=Host(`ombi.${DOMAIN}`)"
     depends_on:
       - radarr
       - sonarr
@@ -83,14 +83,14 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/London
+      - TZ=America/Caracas
     volumes:
       - ${DLDIR}:/downloads
       - ./deluge:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)"
   jackett:
     image: linuxserver/jackett
     container_name: jackett
@@ -104,29 +104,29 @@ services:
       - ./jackett:/config
       - ${DLDIR}/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
-    labels:
-      - "traefik.http.routers.jackett.rule=Host(`jackett.${DOMAIN}`)"
+#    labels:
+#      - "traefik.http.routers.jackett.rule=Host(`jackett.${DOMAIN}`)"
   heimdall:
     image: linuxserver/heimdall
     container_name: heimdall
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/London
+      - TZ=America/Caracas
     volumes:
       - ./heimdall:/config
     ports:
       - "8888:80"
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.heimdall.rule=Host(`${DOMAIN}`,`${IP}`)"
-  traefik:
-    image: traefik:v2.0 # The official v2.0 Traefik docker image
-    container_name: traefik
-    command: --api --providers.docker # Enables the web UI and tells Traefik to listen to docker
-    ports:
-      - "80:80" # The HTTP port
-      - "9090:8080" # The Web UI (enabled by --api)
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+#    labels:
+#      - "traefik.http.routers.heimdall.rule=Host(`${DOMAIN}`,`${IP}`)"
+#  traefik:
+#    image: traefik:v2.0 # The official v2.0 Traefik docker image
+#    container_name: traefik
+#    command: --api --providers.docker # Enables the web UI and tells Traefik to listen to docker
+#    ports:
+#      - "80:80" # The HTTP port
+#      - "9090:8080" # The Web UI (enabled by --api)
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 
